@@ -155,6 +155,12 @@ public class TradeItem {
 	public void setExpired(boolean expired) {
 		this.expired = expired;
 	}
+	@Override
+	public String toString() {
+		return "TradeItem [tradeId=" + tradeId + ", version=" + version + ", counterPartyId=" + counterPartyId
+				+ ", bookId=" + bookId + ", maturityDate=" + maturityDate + ", createdDate=" + createdDate
+				+ ", expired=" + expired + "]";
+	}
 	
 
 }

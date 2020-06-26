@@ -26,19 +26,35 @@ public class TradeStore {
 		
 		tradeStore =  new LinkedList<TradeItem>();
 		Date today  = Calendar.getInstance().getTime();
+		TradeItem tradeItem = null;
 		
 		try {
-			tradeStore.add(new TradeItem("T1", 1, "CP-1", "B1", dateFormat.parse("20/05/2020"), today, false));
-			tradeStore.add(new TradeItem("T2", 2, "CP-2", "B1", dateFormat.parse("20/05/2021"), today, false));
-			tradeStore.add(new TradeItem("T2", 1, "CP-1", "B1", dateFormat.parse("20/05/2021"), today, false));
-			tradeStore.add(new TradeItem("T3", 3, "CP-3", "B2", dateFormat.parse("20/05/2014"), today, true));
+
+			tradeItem = new TradeItem("T1", 1, "CP-1", "B1", dateFormat.parse("20/05/2025"), today, false);
+			TradeStoreManager.addTrade(tradeItem, tradeStore);
+			
+			tradeItem = new TradeItem("T2", 2, "CP-2", "B1", dateFormat.parse("20/05/2021"), today, false);
+			TradeStoreManager.addTrade(tradeItem, tradeStore);
+			
+			tradeItem = new TradeItem("T2", 1, "CP-1", "B1", dateFormat.parse("20/05/2021"), today, false);
+			TradeStoreManager.addTrade(tradeItem, tradeStore);
+			
+			tradeItem = new TradeItem("T3", 3, "CP-3", "B2", dateFormat.parse("20/05/2024"), today, false);
+			TradeStoreManager.addTrade(tradeItem, tradeStore);
+			
+			
+			tradeItem = new TradeItem("T2", 2, "CP-2", "B1", dateFormat.parse("20/05/2021"), today, false);
+			TradeStoreManager.addTrade(tradeItem, tradeStore);
+			
+			
+			
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
-		}
+		} 
 		
-		for(TradeItem tradeItem: tradeStore) {
-			System.out.println(tradeItem.getTradeId());
+		for(TradeItem tradeItm: tradeStore) {
+			System.out.println(tradeItm);
 		}
 		
 

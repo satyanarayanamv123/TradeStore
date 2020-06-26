@@ -22,13 +22,19 @@ public class TradeStoreManager {
 	 * @param pTradeItem
 	 * @param pTradeStore
 	 */
-	public static void addTrade(TradeItem pTradeItem, LinkedList<TradeItem> pTradeStore) throws InvalidTradeException {
+	public static void addTrade(TradeItem pTradeItem, LinkedList<TradeItem> pTradeStore) {
 
-		isTradeMaturityDateValid(pTradeItem);
+		try {
+			isTradeMaturityDateValid(pTradeItem);
 
-		int locationToInsert = findTradeLocation(pTradeItem, pTradeStore);
+			int locationToInsert = findTradeLocation(pTradeItem, pTradeStore);
 
-		pTradeStore.add(locationToInsert, pTradeItem);
+			pTradeStore.add(locationToInsert, pTradeItem);
+
+		} catch (InvalidTradeException e) {
+			System.out.println(e.getErrorMessage());
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -41,7 +47,7 @@ public class TradeStoreManager {
 		boolean matured = false;
 		Calendar calendar = Calendar.getInstance();
 		if (calendar.getTime().after(pTradeItem.getMaturityDate())) {
-			throw new InvalidTradeException(TRADE_MATURED, "Trade item already matured");
+			throw new InvalidTradeException(TRADE_MATURED, "Trade item already matured " + pTradeItem.toString());
 		}
 	}
 
@@ -62,22 +68,29 @@ public class TradeStoreManager {
 
 		while (tradeItemItr.hasNext() && !locationFound) {
 			currTradeItem = tradeItemItr.next();
-			if (currTradeItem.getTradeId().compareTo(pTradeItemToInsert.getTradeId()) > 1) {
+			if (currTradeItem.getTradeId().compareTo(pTradeItemToInsert.getTradeId()) > 0) {
+				locationFound = true;
 				location = index;
-			} else if (currTradeItem.getTradeId().compareTo(pTradeItemToInsert.getTradeId()) < 1) {
-
+			} else if (currTradeItem.getTradeId().compareTo(pTradeItemToInsert.getTradeId()) < 0) {
+				
 			} else {
 				// trade ids are equal
 				if (currTradeItem.getVersion() > pTradeItemToInsert.getVersion()) {
+					locationFound = true;
 					location = index;
 				} else if (currTradeItem.getVersion() < pTradeItemToInsert.getVersion()) {
 
 				} else {
 					// equals
-					throw new InvalidTradeException(INVALID_TRADE, "Trade item is invalid");
+					throw new InvalidTradeException(INVALID_TRADE,
+							"Trade item is invalid " + pTradeItemToInsert.toString());
 				}
 			}
 			index++;
+		}
+		
+		if(!locationFound) {
+			location = pTradeStore.size();
 		}
 
 		return location;
